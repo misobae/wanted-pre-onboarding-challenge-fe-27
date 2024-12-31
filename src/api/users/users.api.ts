@@ -7,3 +7,10 @@ export const postSignUp = ({ email, password }: SignRequest) => {
     body: { email, password },
   });
 };
+
+export const postSignIn = ({ email, password }: SignRequest) => {
+  return fetchData<SignResponse>("/users/login", {
+    method: "POST",
+    body: { email, password },
+  });
+};

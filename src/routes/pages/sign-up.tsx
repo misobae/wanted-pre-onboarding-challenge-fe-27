@@ -10,7 +10,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ROUTER_PATHS } from "@/constants/router-path";
 import { useToast } from "@/hooks/use-toast";
+import { signUpSchema } from "@/schemas/sign-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -21,29 +23,8 @@ export default function SignUp() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const signUpSchema = z
-    .object({
-      email: z
-        .string()
-        .min(1, { message: "이메일을 입력해 주세요." })
-        .email({ message: "이메일 형식이 올바르지 않습니다." }),
-      password: z
-        .string()
-        .min(8, { message: "비밀번호는 8자 이상이어야 합니다." }),
-      passwordConfirm: z.string(),
-    })
-    .refine((data) => data.password === data.passwordConfirm, {
-      message: "비밀번호가 일치하지 않습니다.",
-      path: ["passwordConfirm"],
-    });
-
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      passwordConfirm: "",
-    },
     mode: "all",
   });
 
@@ -62,7 +43,7 @@ export default function SignUp() {
             title: "회원가입 성공",
             description: response.message,
           });
-          navigate("/auth");
+          navigate(ROUTER_PATHS.SIGNIN);
         },
         onError: (error) => {
           toast({
@@ -138,7 +119,7 @@ export default function SignUp() {
           </form>
         </Form>
         <div className="mt-6 text-xs text-center text-gray-500">
-          <Link to="/auth">이미 계정이 있으신가요?</Link>
+          <Link to={ROUTER_PATHS.SIGNIN}>이미 계정이 있으신가요?</Link>
         </div>
       </CardContent>
     </Card>
