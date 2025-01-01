@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ROUTER_PATHS } from "@/constants/router-path";
 import { useToast } from "@/hooks/use-toast";
+import AuthLayout from "@/layouts/AuthLayout";
 import { signUpSchema } from "@/schemas/sign-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -19,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 
-export default function SignUp() {
+export default function SignUpPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -56,72 +57,78 @@ export default function SignUp() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">계정을 생성하세요</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-2"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel hidden>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="이메일" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel hidden>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="비밀번호" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="passwordConfirm"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel hidden>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="비밀번호 확인"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              disabled={!form.formState.isValid}
-              className="mt-4"
+    <AuthLayout>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">계정을 생성하세요</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-2"
             >
-              회원가입
-            </Button>
-          </form>
-        </Form>
-        <div className="mt-6 text-xs text-center text-gray-500">
-          <Link to={ROUTER_PATHS.SIGNIN}>이미 계정이 있으신가요?</Link>
-        </div>
-      </CardContent>
-    </Card>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel hidden>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="이메일" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel hidden>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="비밀번호"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="passwordConfirm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel hidden>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="비밀번호 확인"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                disabled={!form.formState.isValid}
+                className="mt-4"
+              >
+                회원가입
+              </Button>
+            </form>
+          </Form>
+          <div className="mt-6 text-xs text-center text-gray-500">
+            <Link to={ROUTER_PATHS.SIGNIN}>이미 계정이 있으신가요?</Link>
+          </div>
+        </CardContent>
+      </Card>
+    </AuthLayout>
   );
 }
