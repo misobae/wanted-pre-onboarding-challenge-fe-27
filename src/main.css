@@ -116,6 +116,12 @@ select {
   font: inherit;
 }
 
+.common-wrapper {
+  width: 90%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
 /* Remove all animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {

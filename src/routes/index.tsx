@@ -6,6 +6,7 @@ import SignInPage from "./pages/sign-in";
 import SignUpPage from "./pages/sign-up";
 import { PrivateGuard } from "./outlets/private-guard";
 import TodoPage from "./pages/todo";
+import TodoDetailPage from "./pages/todo-detail";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,12 @@ const router = createBrowserRouter([
       {
         path: ROUTER_PATHS.TODO,
         element: <TodoPage />,
+        children: [
+          {
+            path: ROUTER_PATHS.TODO_DETAIL(":todoId"),
+            element: <TodoDetailPage />,
+          },
+        ],
       },
     ],
   },
