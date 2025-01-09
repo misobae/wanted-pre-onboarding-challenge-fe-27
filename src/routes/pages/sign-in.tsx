@@ -1,15 +1,13 @@
 import { postSignIn } from "@/api/users/users.api";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormField } from "@/components/common";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+} from "@/components/ui";
 import { ROUTER_PATHS } from "@/constants/router-path";
 import { useAuthContext } from "@/context/auth-context";
 import { useToast } from "@/hooks/use-toast";
@@ -61,49 +59,32 @@ export default function SignInPage() {
           <CardTitle className="text-2xl">안녕하세요?</CardTitle>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-2"
+          <Form form={form} className="flex flex-col gap-2" onSubmit={onSubmit}>
+            <FormField
+              control={form.control}
+              name="email"
+              label="Email"
+              children={(field) => (
+                <Input type="email" placeholder="이메일" {...field} />
+              )}
+              hidden
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              label="Password"
+              children={(field) => (
+                <Input type="password" placeholder="비밀번호" {...field} />
+              )}
+              hidden
+            />
+            <Button
+              type="submit"
+              disabled={!form.formState.isValid}
+              className="mt-4"
             >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel hidden>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="이메일" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel hidden>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="비밀번호"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                type="submit"
-                disabled={!form.formState.isValid}
-                className="mt-4"
-              >
-                로그인
-              </Button>
-            </form>
+              로그인
+            </Button>
           </Form>
           <div className="mt-6 text-xs text-center text-gray-500">
             <Link to={ROUTER_PATHS.SIGNUP}>아직 가입하지 않으셨나요?</Link>
