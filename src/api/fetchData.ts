@@ -10,7 +10,8 @@ export const fetchData = async <T>(
   options: FetchOptions = {}
 ): Promise<T> => {
   const url = `${import.meta.env.VITE_API_URL}${endpoint}`;
-  const { method = "GET", headers, body, token } = options;
+  const { method = "GET", headers, body } = options;
+  const token = localStorage.getItem("token");
 
   const defaultHeaders: HeadersInit = {
     "Content-Type": "application/json",
