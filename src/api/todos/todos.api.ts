@@ -16,7 +16,11 @@ export const postTodo = ({ title, content }: TodoRequest) => {
   });
 };
 
-export const updateTodo = (todoId: string, { title, content }: TodoRequest) => {
+export const updateTodo = ({
+  todoId,
+  title,
+  content,
+}: TodoRequest & { todoId: string }) => {
   return fetchData<TodoResponse<TodoDataContents>>(`/todos/${todoId}`, {
     method: "PUT",
     body: { title, content },
