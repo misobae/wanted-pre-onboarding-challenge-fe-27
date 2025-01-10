@@ -1,15 +1,58 @@
-import { getTodoList } from "@/api/todos/todos.api";
+import { getTodoList, postTodo } from "@/api/todos/todos.api";
+import TodoForm from "@/components/feature/todo/TodoForm";
+import { Button } from "@/components/ui";
 import { ROUTER_PATHS } from "@/constants/router-path";
+import { useToast } from "@/hooks/use-toast";
 import TodoLayout from "@/layouts/TodoLayout";
-import { useQuery } from "@tanstack/react-query";
-import { Link, Outlet } from "react-router";
+import { todoSchema } from "@/schemas/todo-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
+import { z } from "zod";
 import dayjs from "dayjs";
 
 export default function TodoPage() {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const form = useForm<z.infer<typeof todoSchema>>({
+    resolver: zodResolver(todoSchema),
+    mode: "onSubmit",
+  });
+
   const { data: todos } = useQuery({
     queryKey: ["todos"],
     queryFn: getTodoList,
   });
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: postTodo,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["todos"],
+      }),
+  });
+
+  const onSubmit = async (values: z.infer<typeof todoSchema>) => {
+    mutation.mutate(values, {
+      onSuccess: (response) => {
+        toast({
+          title: "할 일 등록",
+          description: "할 일을 등록했습니다.",
+        });
+        navigate(ROUTER_PATHS.TODO_DETAIL(response.data.id));
+      },
+      onError: (error) => {
+        toast({
+          title: "할 일 등록",
+          description: error.message ?? "할 일 등록에 실패했습니다.",
+        });
+      },
+    });
+  };
 
   return (
     <TodoLayout>
@@ -31,7 +74,11 @@ export default function TodoPage() {
             );
           })}
         </div>
-
+        {location.pathname === "/todo" && (
+          <TodoForm form={form} onSubmit={onSubmit}>
+            <Button>등록</Button>
+          </TodoForm>
+        )}
         <Outlet />
       </div>
     </TodoLayout>

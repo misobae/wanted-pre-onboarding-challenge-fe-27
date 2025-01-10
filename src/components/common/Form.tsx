@@ -1,10 +1,10 @@
 import { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { Form as FormUI } from "../ui";
 
-interface FormProps<TFieldValues extends FieldValues> {
+export interface FormProps<TFieldValues extends FieldValues> {
   form: UseFormReturn<TFieldValues>;
   onSubmit: SubmitHandler<TFieldValues>;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   formProps?: React.FormHTMLAttributes<HTMLFormElement>;
 }
