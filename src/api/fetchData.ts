@@ -30,7 +30,7 @@ export const fetchData = async <T>(
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData?.message || "Something went wrong");
+      throw new Error(errorData?.details || "Something went wrong");
     }
 
     return (await response.json()) as T;
