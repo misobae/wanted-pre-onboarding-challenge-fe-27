@@ -10,7 +10,7 @@ import {
 } from "@/components/ui";
 import { ROUTER_PATHS } from "@/constants/router-path";
 import { useAuthContext } from "@/context/auth-context";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/ui/use-toast";
 import AuthLayout from "@/layouts/AuthLayout";
 import { signInSchema } from "@/schemas/sign-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +33,7 @@ export default function SignInPage() {
     mutationFn: postSignIn,
   });
 
-  const onSubmit = async (values: z.infer<typeof signInSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof signInSchema>) => {
     mutation.mutate(values, {
       onSuccess: (response) => {
         login(response.token);
@@ -59,7 +59,11 @@ export default function SignInPage() {
           <CardTitle className="text-2xl">안녕하세요?</CardTitle>
         </CardHeader>
         <CardContent>
-          <Form form={form} className="flex flex-col gap-2" onSubmit={onSubmit}>
+          <Form
+            form={form}
+            className="flex flex-col gap-2"
+            onSubmit={handleSubmit}
+          >
             <FormField
               control={form.control}
               name="email"

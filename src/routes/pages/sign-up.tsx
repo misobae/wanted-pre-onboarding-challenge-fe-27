@@ -9,7 +9,7 @@ import {
   Input,
 } from "@/components/ui";
 import { ROUTER_PATHS } from "@/constants/router-path";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/ui/use-toast";
 import AuthLayout from "@/layouts/AuthLayout";
 import { signUpSchema } from "@/schemas/sign-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,7 @@ export default function SignUpPage() {
     mutationFn: postSignUp,
   });
 
-  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof signUpSchema>) => {
     const { email, password } = values;
 
     mutation.mutate(
@@ -61,7 +61,11 @@ export default function SignUpPage() {
           <CardTitle className="text-2xl">계정을 생성하세요</CardTitle>
         </CardHeader>
         <CardContent>
-          <Form form={form} className="flex flex-col gap-2" onSubmit={onSubmit}>
+          <Form
+            form={form}
+            className="flex flex-col gap-2"
+            onSubmit={handleSubmit}
+          >
             <FormField
               control={form.control}
               name="email"

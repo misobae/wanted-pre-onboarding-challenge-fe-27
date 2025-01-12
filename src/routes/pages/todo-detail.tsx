@@ -1,47 +1,30 @@
-import { deleteTodo, getTodoById, updateTodo } from "@/api/todos/todos.api";
+import { getTodoById } from "@/api/todos/todos.api";
 import { TodoForm } from "@/components/feature";
 import { Button } from "@/components/ui";
 import { ROUTER_PATHS } from "@/constants/router-path";
-import { useToast } from "@/hooks/use-toast";
+import {
+  useToast,
+  useTodoDeleteMutation,
+  useTodoForm,
+  useTodoUpdateMutation,
+} from "@/hooks";
 import { todoSchema } from "@/schemas/todo-schema";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { z } from "zod";
 
 export default function TodoDetailPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const todoId = location.pathname.split("/")[2];
+  const { todoId } = useParams() as { todoId: string };
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const form = useTodoForm();
+  const updateMutation = useTodoUpdateMutation();
+  const deleteMutation = useTodoDeleteMutation();
+
   const { data: todo, isSuccess } = useQuery({
     queryKey: ["todo", todoId],
     queryFn: () => getTodoById(todoId),
-  });
-
-  const queryClient = useQueryClient();
-  const updateMutation = useMutation({
-    mutationFn: updateTodo,
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["todos"],
-      }),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteTodo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["todos"],
-      });
-
-      form.reset({ title: "", content: "" });
-    },
-  });
-
-  const form = useForm<z.infer<typeof todoSchema>>({
-    defaultValues: {},
   });
 
   useEffect(() => {
@@ -71,6 +54,7 @@ export default function TodoDetailPage() {
           title: "할 일 삭제",
           description: "할 일을 삭제했습니다.",
         });
+        form.reset();
         navigate(ROUTER_PATHS.TODO);
       },
     });

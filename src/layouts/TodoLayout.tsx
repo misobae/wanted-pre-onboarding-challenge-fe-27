@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/auth-context";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/ui/use-toast";
 import { HTMLAttributes } from "react";
 
 export default function TodoLayout({
