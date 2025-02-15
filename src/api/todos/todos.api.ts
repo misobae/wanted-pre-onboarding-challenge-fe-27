@@ -2,7 +2,6 @@ import { fetchData } from "../fetchData";
 import { TodoRequest, TodoResponse, TodoDataContents } from "./todos.dto";
 
 export const getTodoList = () => {
-  throw new Error("할 일 목록을 불러오는데 실패했습니다.");
   return fetchData<TodoResponse<TodoDataContents[]>>(`/todos`);
 };
 
